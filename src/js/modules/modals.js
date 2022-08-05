@@ -71,7 +71,7 @@ const modals = () => {
     setTimeout(() => {
       let display;
 
-      document.querySelectorAll("[data-modal").forEach((item) => {
+      document.querySelectorAll("[data-modal]").forEach((item) => {
         if (item.classList.contains("show")) {
           display = true;
         }
