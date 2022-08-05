@@ -60,7 +60,7 @@ h4 {
   font-family: 'Circe Extra Bold', sans-serif;
 }
 .p15 {
-  font-size: 1.5;
+  font-size: 1.5rem;
 }
 .p-heading {
   font-size: 2.2rem;
@@ -91,7 +91,7 @@ h4 {
 }
 .button-order {
   background-image: linear-gradient(66deg, #a12ab1 0%, #c818bc 100%);
-  box-shadow: 0px 15px 30px 0px rgba(170, 38, 183, 0.39);
+  box-shadow: 0 15px 30px 0 rgba(170, 38, 183, 0.39);
   font-size: 1.5rem;
   padding: 1.5rem 2rem;
   color: #ffffff;
@@ -818,6 +818,7 @@ h4 {
 }
 .promo-2 {
   padding: 9rem 0 10rem 0;
+  overflow: hidden;
 }
 .promo-2-block {
   margin-left: 10rem;
@@ -836,6 +837,9 @@ h4 {
 .feedback {
   background-color: #f7e7e6;
   padding: 9rem 0;
+}
+.feedback-slider {
+  overflow: hidden;
 }
 .feedback-slider-item {
   padding-bottom: 5rem;
@@ -1575,7 +1579,7 @@ h4 {
     font-size: 1.5rem;
   }
   .main-features {
-    max-width: auto;
+    max-width: 100%;
     margin-left: 20%;
   }
   .main-slider-btn {
