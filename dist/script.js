@@ -10,111 +10,102 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calcScroll": () => (/* binding */ calcScroll),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "hideModal": () => (/* binding */ hideModal)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function hideModal(modal) {
-  document.body.classList.remove("modal-open");
-  modal.classList.remove("show", "animated", "fadeIn");
-  modal.classList.add("hide");
-}
-function calcScroll() {
-  let div = document.createElement("div");
-  div.style.width = "50px";
-  div.style.height = "50px";
-  div.style.overflowY = "scroll";
-  div.style.visibility = "hidden";
-  document.body.appendChild(div);
-  let scrollWidth = div.offsetWidth - div.clientWidth;
-  div.remove();
-  return scrollWidth;
-}
-
 const modals = () => {
-  let btnPressed = false;
+  let isOpened = false;
 
-  function bindModal(triggerSelector, modalSelector) {
-    let destroy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-    let triggers = document.querySelectorAll(triggerSelector),
-        modal = document.querySelector(modalSelector),
-        allModals = document.querySelectorAll("[data-modal]"),
-        scrollWidth = calcScroll();
-
-    function showModal(modal) {
-      document.body.classList.add("modal-open");
-      modal.classList.add("show", "animated", "fadeIn");
-      modal.classList.remove("hide");
-      document.body.style.marginRight = `${scrollWidth}px`;
-    }
-
-    triggers.forEach(item => {
-      item.addEventListener("click", e => {
+  function bindModal(triggerSelector, modalSelector, closeSelector) {
+    let destroy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+    const trigger = document.querySelectorAll(triggerSelector),
+          modal = document.querySelector(modalSelector),
+          close = document.querySelector(closeSelector),
+          windows = document.querySelectorAll('[data-modal]'),
+          scroll = calcScroll();
+    trigger.forEach(item => {
+      item.addEventListener('click', e => {
         if (e.target) {
           e.preventDefault();
         }
-
-        btnPressed = true;
 
         if (destroy) {
           item.remove();
         }
 
-        allModals.forEach(item => {
-          hideModal(item);
-          document.body.style.marginRight = `0px`;
+        windows.forEach(item => {
+          item.style.display = 'none';
+          item.classList.add('animated', 'fadeIn');
         });
-        showModal(modal);
+        isOpened = true;
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+        document.body.style.marginRight = `${scroll}px`;
       });
     });
-    modal.addEventListener("click", e => {
-      if (e.target === modal || e.target.classList.contains("popup-close")) {
-        hideModal(modal);
-        document.body.style.marginRight = `0px`;
-        allModals.forEach(item => {
-          hideModal(item);
+    close.addEventListener('click', () => {
+      windows.forEach(item => {
+        item.style.display = 'none';
+      });
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+      document.body.style.marginRight = `0px`;
+    });
+    modal.addEventListener('click', e => {
+      if (e.target === modal) {
+        windows.forEach(item => {
+          item.style.display = 'none';
         });
+        modal.style.display = "none";
+        document.body.style.overflow = "";
+        document.body.style.marginRight = `0px`;
       }
     });
   }
 
   function showModalByTime(selector, time) {
-    setTimeout(() => {
+    setTimeout(function () {
       let display;
-      document.querySelectorAll("[data-modal]").forEach(item => {
-        if (item.classList.contains("show")) {
-          display = true;
+      document.querySelectorAll('[data-modal]').forEach(modal => {
+        if (getComputedStyle(modal).display !== 'none') {
+          display = "block";
         }
       });
 
-      if (!display) {
-        document.body.classList.add("modal-open");
-        document.querySelector(selector).classList.add("show");
-        document.querySelector(selector).classList.remove("hide");
+      if (!display && !isOpened) {
+        document.querySelector(selector).style.display = 'block';
+        document.body.style.overflow = "hidden";
         document.body.style.marginRight = `${calcScroll()}px`;
       }
     }, time);
   }
 
-  function openByScroll(selector) {
-    window.addEventListener("scroll", () => {
-      let scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  function calcScroll() {
+    let div = document.createElement('div');
+    div.style.width = '50px';
+    div.style.height = '50px';
+    div.style.overflowY = 'scroll';
+    div.style.visibility = 'hidden';
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+  }
 
-      if (!btnPressed && window.pageYOffset + document.documentElement.clientHeight >= scrollHeight - 1) {
+  function openByScroll(selector) {
+    window.addEventListener('scroll', () => {
+      let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+
+      if (!isOpened && window.pageYOffset + document.documentElement.clientHeight >= scrollHeight - 1) {
         document.querySelector(selector).click();
-        console.log(btnPressed);
       }
     });
   }
 
-  bindModal(".button-design", ".popup-design");
-  bindModal(".button-consultation", ".popup-consultation");
-  bindModal(".fixed-gift", ".popup-gift", true);
-  openByScroll(".fixed-gift");
-  showModalByTime(".popup-consultation", 5000); // bindModal(".phone_link", ".popup");
-  // bindModal(".popup_calc_btn", ".popup_calc", false);
-  // bindModal(".popup_calc_button", ".popup_calc_profile", false);
-  // bindModal(".popup_calc_profile_button", ".popup_calc_end", false);
+  bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
+  bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
+  bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+  openByScroll('.fixed-gift');
+  showModalByTime('.popup-consultation', 5000);
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modals);
