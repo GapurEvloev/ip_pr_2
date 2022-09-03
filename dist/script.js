@@ -37,6 +37,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+
 const forms = () => {
   const allForms = document.querySelectorAll("form"),
         allInputs = document.querySelectorAll("input"),
@@ -53,15 +56,14 @@ const forms = () => {
   const path = {
     designer: 'assets/server.php',
     question: 'assets/question.php'
-  };
-
-  const postData = async (url, data) => {
-    let res = await fetch(url, {
-      method: "POST",
-      body: data
-    });
-    return await res.text();
-  };
+  }; // const postData = async (url, data) => {
+  //   let res = await fetch(url, {
+  //     method: "POST",
+  //     body: data
+  //   });
+  //
+  //   return await res.text();
+  // };
 
   const clearInputs = () => {
     allInputs.forEach(input => {
@@ -100,7 +102,7 @@ const forms = () => {
       let api;
       form.closest(".popup-design") || form.classList.contains("calc_form") ? api = path.designer : api = path.question;
       console.log(api);
-      postData(api, formData).then(res => {
+      (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(api, formData).then(res => {
         console.log(res);
         statusImg.setAttribute('src', messages.ok);
         textMessage.textContent = messages.success;
@@ -297,6 +299,50 @@ const modals = () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/showMoreFetch.js":
+/*!*****************************************!*\
+  !*** ./src/js/modules/showMoreFetch.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+
+const showMoreFetch = (trigger, wrapper) => {
+  const btn = document.querySelector(trigger);
+  btn.addEventListener("click", function () {
+    (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.getResource)("http://localhost:3000/styles").then(res => createCard(res)).catch(error => console.log(error));
+  });
+
+  function createCard(response) {
+    response.forEach(_ref => {
+      let {
+        src,
+        link,
+        title
+      } = _ref;
+      let card = document.createElement("div");
+      card.classList.add("col-sm-3", "col-sm-offset-0", "col-xs-10", "col-xs-offset-1");
+      card.innerHTML = `
+        <div className=styles-block>
+          <img src=${src} alt=${title}/>
+          <h4>${title}</h4>
+          <a href=${link}>Подробнее</a>
+        </div>
+      `;
+      document.querySelector(wrapper).appendChild(card);
+    });
+  }
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (showMoreFetch);
+
+/***/ }),
+
 /***/ "./src/js/modules/showMoreStyles.js":
 /*!******************************************!*\
   !*** ./src/js/modules/showMoreStyles.js ***!
@@ -406,6 +452,36 @@ const sliders = (slides, dir, prev, next) => {
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (sliders);
 
+/***/ }),
+
+/***/ "./src/js/services/requests.js":
+/*!*************************************!*\
+  !*** ./src/js/services/requests.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getResource": () => (/* binding */ getResource),
+/* harmony export */   "postData": () => (/* binding */ postData)
+/* harmony export */ });
+const postData = async (url, data) => {
+  let res = await fetch(url, {
+    method: "POST",
+    body: data
+  });
+  return await res.text();
+};
+const getResource = async url => {
+  let res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
+  }
+
+  return await res.json();
+};
+
 /***/ })
 
 /******/ 	});
@@ -477,6 +553,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
 /* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
+/* harmony import */ var _modules_showMoreFetch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/showMoreFetch */ "./src/js/modules/showMoreFetch.js");
+
 
 
 
@@ -494,6 +572,8 @@ window.addEventListener("DOMContentLoaded", () => {
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   (0,_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])(".button-styles", ".styles-2");
+  (0,_modules_showMoreFetch__WEBPACK_IMPORTED_MODULE_6__["default"])(".button-styles", "#style .row");
+  ;
 });
 })();
 
