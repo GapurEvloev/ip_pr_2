@@ -2,6 +2,103 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/forms.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const forms = () => {
+  const allForms = document.querySelectorAll("form"),
+        allInputs = document.querySelectorAll("input"),
+        uploads = document.querySelectorAll('[name="upload"]'); // checkNumInputs("input[name='user_phone']");
+
+  const messages = {
+    loading: 'Загрузка...',
+    success: 'Спасибо! Скоро мы с вами свяжемся',
+    failure: 'Что-то пошло не так...',
+    spinner: 'assets/img/spinner.gif',
+    ok: 'assets/img/ok.png',
+    fail: 'assets/img/fail.png'
+  };
+  const path = {
+    designer: 'assets/server.php',
+    question: 'assets/question.php'
+  };
+
+  const postData = async (url, data) => {
+    let res = await fetch(url, {
+      method: "POST",
+      body: data
+    });
+    return await res.text();
+  };
+
+  const clearInputs = () => {
+    allInputs.forEach(input => {
+      input.value = "";
+    });
+    uploads.forEach(item => {
+      item.previousElementSibling.textContent = "Файл не выбран";
+    });
+  };
+
+  uploads.forEach(upload => {
+    upload.addEventListener("input", () => {
+      const arr = upload.files[0].name.split(".");
+      let dots = arr[0].length > 6 ? "..." : ".";
+      upload.previousElementSibling.textContent = arr[0].substr(0, 6) + dots + arr[1];
+    });
+  });
+  allForms.forEach(form => {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      let statusMessage = document.createElement("div");
+      statusMessage.classList.add("status");
+      form.parentNode.appendChild(statusMessage);
+      form.classList.add("animated", "fadeOut");
+      setTimeout(() => {
+        form.style.display = "none";
+      }, 400);
+      let statusImg = document.createElement('img');
+      statusImg.setAttribute('src', messages.spinner);
+      statusImg.classList.add('animated', 'fadeIn');
+      statusMessage.appendChild(statusImg);
+      let textMessage = document.createElement('div');
+      textMessage.textContent = messages.loading;
+      statusMessage.appendChild(textMessage);
+      const formData = new FormData(form);
+      let api;
+      form.closest(".popup-design") || form.classList.contains("calc_form") ? api = path.designer : api = path.question;
+      console.log(api);
+      postData(api, formData).then(res => {
+        console.log(res);
+        statusImg.setAttribute('src', messages.ok);
+        textMessage.textContent = messages.success;
+      }).catch(() => {
+        statusImg.setAttribute("src", messages.fail);
+        textMessage.textContent = messages.failure;
+      }).finally(() => {
+        clearInputs();
+        setTimeout(() => {
+          statusMessage.remove();
+          form.style.display = "block";
+          form.classList.remove("fadeOut");
+          form.classList.add("fadeIn");
+        }, 3000);
+      });
+    });
+  });
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (forms);
+
+/***/ }),
+
 /***/ "./src/js/modules/modals.js":
 /*!**********************************!*\
   !*** ./src/js/modules/modals.js ***!
@@ -40,6 +137,7 @@ const modals = () => {
         modal.style.display = "block";
         document.body.style.overflow = "hidden";
         document.body.style.marginRight = `${scroll}px`;
+        document.querySelector(".fixed-gift").style.transform = `translateX(${-scroll}px)`;
       });
     });
     close.addEventListener('click', () => {
@@ -49,6 +147,7 @@ const modals = () => {
       modal.style.display = "none";
       document.body.style.overflow = "";
       document.body.style.marginRight = `0px`;
+      document.querySelector(".fixed-gift").style.transform = `translateX(0)`;
     });
     modal.addEventListener('click', e => {
       if (e.target === modal) {
@@ -58,6 +157,7 @@ const modals = () => {
         modal.style.display = "none";
         document.body.style.overflow = "";
         document.body.style.marginRight = `0px`;
+        document.querySelector(".fixed-gift").style.transform = `translateX(0)`;
       }
     });
   }
@@ -259,6 +359,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_sliders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/sliders */ "./src/js/modules/sliders.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -267,6 +369,7 @@ window.addEventListener("DOMContentLoaded", () => {
   (0,_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])(".feedback-slider-item", "horizontal", ".main-prev-btn", ".main-next-btn");
   (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])(".main-slider-item", "vertical", ".main-prev-btn", ".main-next-btn");
+  (0,_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
 });
 })();
 
