@@ -424,6 +424,7 @@ h4 {
 }
 .styles {
   position: relative;
+  padding-bottom: 3em;
 }
 .styles .p-heading {
   text-align: center;
@@ -457,7 +458,7 @@ h4 {
 }
 .styles .button-transparent {
   margin-top: 8rem;
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
 }
 .styles .button-transparent:before {
   background: url("../img/reload.svg") no-repeat center;
