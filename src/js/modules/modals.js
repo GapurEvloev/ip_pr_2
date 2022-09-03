@@ -15,7 +15,7 @@ const modals = () => {
         }
 
         if(destroy) {
-          item.remove();
+          item.style.display = "none";
         }
 
         windows.forEach(item => {

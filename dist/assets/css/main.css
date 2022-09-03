@@ -1013,6 +1013,9 @@ h4 {
 .footer .modernwebdev {
   margin-top: 1rem;
 }
+.status {
+  text-align: center;
+}
 .popup-consultation {
   z-index: 20;
   position: fixed;
