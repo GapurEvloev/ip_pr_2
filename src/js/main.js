@@ -5,6 +5,7 @@ import mask from "./modules/mask";
 import checkTextInputs from "./modules/checkTextInputs";
 import showMoreStyles from "./modules/showMoreStyles";
 import showMoreFetch from "./modules/showMoreFetch";
+import calc from "./modules/calc";
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
@@ -17,5 +18,6 @@ window.addEventListener("DOMContentLoaded", () => {
   checkTextInputs('[name="name"]');
   checkTextInputs('[name="message"]');
   showMoreStyles(".button-styles", ".styles-2");
-  showMoreFetch(".button-styles", ".styles .row");;
+  showMoreFetch(".button-styles", ".styles .row");
+  calc("#size", "#material", "#options", ".promocode", ".calc-price");
 });
