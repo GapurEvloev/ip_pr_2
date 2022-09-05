@@ -7,6 +7,7 @@ import showMoreStyles from "./modules/showMoreStyles";
 import showMoreFetch from "./modules/showMoreFetch";
 import calc from "./modules/calc";
 import filter from "./modules/filter";
+import pictureSize from "./modules/pictureSize";
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
@@ -22,4 +23,5 @@ window.addEventListener("DOMContentLoaded", () => {
   showMoreFetch(".button-styles", ".styles .row");
   calc("#size", "#material", "#options", ".promocode", ".calc-price");
   filter();
+  pictureSize('.sizes-block');
 });
