@@ -911,6 +911,16 @@ h4 {
   margin-top: 1rem;
   background-color: #f7e7e6;
   padding: 3rem 4rem;
+  display: none;
+}
+.often-questions p.active-style span {
+  color: #E950D7;
+  font-weight: 900;
+  text-decoration: none;
+  border: 0;
+}
+.often-questions .accordion-heading.active+.accordion-block {
+  display: block;
 }
 .often-questions .accordion-block:before {
   content: '';
